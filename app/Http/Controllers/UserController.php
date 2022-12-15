@@ -22,7 +22,9 @@ class UserController extends Controller
 
     public function show($id)
     {
-        return 'Mostrando detalles del usuario: ' . $id;
+        $title = 'Detalles de usuarios';
+
+        return view('show', compact('title', 'id'));
     }
 
     public function create()
