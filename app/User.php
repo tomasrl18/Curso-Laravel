@@ -27,6 +27,10 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    protected $casts = [
+        'is_admin' => 'boolean',
+    ];
+
     public static function findByEmail($email)
     {
         return User::where(compact('email'))->first();
