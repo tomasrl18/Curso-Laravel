@@ -57,7 +57,7 @@
 
         <div class="col-4">
             @section('sidebar')
-                <h1>Barra lateral</h1>
+
             @show
         </div>
     </div>
