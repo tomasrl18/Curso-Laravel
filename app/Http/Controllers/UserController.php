@@ -10,16 +10,6 @@ class UserController extends Controller
 {
     public function index()
     {
-        /*if (request()->has('empty')) {
-            $users = [];
-        } else {
-            $users = [
-                'Joel', 'Ellie', 'Tess', 'Tommy', 'Bill',
-            ];
-        }*/
-
-        //$users = DB::table('users')->get();
-
         $users = User::all();
 
         $title = 'Listado de Usuarios';
@@ -29,7 +19,9 @@ class UserController extends Controller
 
     public function show($id)
     {
-        return view('users.show', compact('id'));
+        $user = User::find($id);
+
+        return view('users.show', compact('user'));
     }
 
     public function create()
