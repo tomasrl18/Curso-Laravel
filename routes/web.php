@@ -10,7 +10,8 @@ Route::get('/usuarios', 'UserController@index')
 Route::get('/usuarios/nuevo', 'UserController@create')
     ->name('users.create');
 
-Route::get('/usuarios/{id}', 'UserController@show')
+Route::get('/usuarios/{user}', 'UserController@show')
+    ->where('user', '[0-9]+')
     ->name('users.show');
 
 Route::get('/usuarios/{id}/edit', 'UserController@edit');
