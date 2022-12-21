@@ -52,7 +52,6 @@ class UsersModuleTest extends TestCase
     /** @test */
     function it_displays_a_404_error_if_the_user_is_not_found()
     {
-        $this->withoutExceptionHandling();
 
         $this->get('/usuarios/999')
             ->assertStatus(404)
