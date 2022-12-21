@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\User;
 
 class UserController extends Controller
 {
@@ -29,13 +29,17 @@ class UserController extends Controller
         return view('users.create');
     }
 
-    public function edit($id)
-    {
-        return 'Editando usuario: ' . $id;
-    }
-
     public function store()
     {
-        return 'Procesando información';
+        $data = request()->all();
+
+        User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+        ]);
+
+        //return redirect('usuarios');
+        return redirect()->route('users.index');
     }
 }

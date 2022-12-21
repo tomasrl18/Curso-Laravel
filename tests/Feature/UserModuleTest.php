@@ -4,19 +4,18 @@ namespace Tests\Feature;
 
 use App\User;
 use Illuminate\Support\Facades\DB;
-use mysql_xdevapi\Table;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UserModuleTest extends TestCase
+class UsersModuleTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    function it_shows_the_users_list_page() {
+    function it_shows_the_users_list()
+    {
         factory(User::class)->create([
-            'name' => 'Joel',
+            'name' => 'Joel'
         ]);
 
         factory(User::class)->create([
@@ -39,34 +38,48 @@ class UserModuleTest extends TestCase
     }
 
     /** @test */
-    function it_displays_the_users_details() {
+    function it_displays_the_users_details()
+    {
         $user = factory(User::class)->create([
-            'name' => 'Tomas Raigal',
+            'name' => 'Tomas'
         ]);
 
-        $this->get('/usuarios/' . $user->id)
+        $this->get('/usuarios/'.$user->id) // usuarios/5
             ->assertStatus(200)
-            ->assertSee('Tomas Raigal');
+            ->assertSee('Tomas');
     }
 
     /** @test */
-    function it_displays_a_404_error_if_the_user_is_not_found() {
+    function it_displays_a_404_error_if_the_user_is_not_found()
+    {
+        $this->withoutExceptionHandling();
+
         $this->get('/usuarios/999')
             ->assertStatus(404)
             ->assertSee('Página no encontrada');
     }
 
     /** @test */
-    function it_loads_the_new_user_page() {
+    function it_loads_the_new_users_page()
+    {
         $this->get('/usuarios/nuevo')
             ->assertStatus(200)
-            ->assertSee('Creando nuevo usuario');
+            ->assertSee('Crear usuario');
     }
 
     /** @test */
-    function it_loads_the_user_edit_page() {
-        $this->get('usuarios/1/edit')
-            ->assertStatus(200)
-            ->assertSee('Editando usuario: 1');
+    function it_creates_a_new_user()
+    {
+        $this->post('/usuarios/', [
+            'name' => 'Pedro',
+            'email' => 'pedro@mail.com',
+            'password' => '123'
+        ])->assertRedirect(route('users.index'));
+
+        $this->assertCredentials([
+            'name' => 'Pedro',
+            'email' => 'pedro@mail.com',
+            'password' => '123',
+        ]);
     }
 }
