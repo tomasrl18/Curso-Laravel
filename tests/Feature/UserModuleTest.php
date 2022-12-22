@@ -183,4 +183,24 @@ class UsersModuleTest extends TestCase
                 return $viewUser->id == $user->id;
             });
     }
+
+    /** @test */
+    function it_edits_a_user()
+    {
+        $user = factory(User::class)->create();
+
+        $this->withoutExceptionHandling();
+
+        $this->put("/usuarios/{$user->id}", [
+            'name' => 'Pedro',
+            'email' => 'pedro@mail.com',
+            'password' => '123456'
+        ])->assertRedirect("/usuarios/{$user->id}");
+
+        $this->assertCredentials([
+            'name' => 'Pedro',
+            'email' => 'pedro@mail.com',
+            'password' => '123456',
+        ]);
+    }
 }
