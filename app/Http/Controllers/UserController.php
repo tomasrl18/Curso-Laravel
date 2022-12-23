@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\User;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -31,7 +32,7 @@ class UserController extends Controller
     {
         $data = request()->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'email' => ['required', 'email', Rule::unique('users', 'email')],
             'password' => 'required|min:6',
         ], [
             'name.required' => 'El campo nombre es obligatorio',
@@ -57,12 +58,12 @@ class UserController extends Controller
     {
         $data = request()->validate([
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($user->id)
+            ],
             'password' => '',
-        ], [
-            'name.required' => 'El campo nombre es obligatorio',
-            'email.required' => 'El campo email es obligatorio',
-            'password.required' => 'El campo password es obligatorio',
         ]);
 
         if ($data['password'] != null) {
