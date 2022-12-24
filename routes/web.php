@@ -21,6 +21,7 @@ Route::get('/usuarios/{user}/editar', 'UserController@edit')
 
 Route::put('/usuarios/{user}', 'UserController@update');
 
-Route::get('/saludo/{name}/{nickname}', 'WelcomeUserController@index');
+Route::get('/saludo/{name}/{nickname?}', 'WelcomeUserController@index');
 
-Route::delete("/usuarios/{user}", 'UserController@destroy');
+Route::delete("/usuarios/{user}", 'UserController@destroy')
+    ->name('users.destroy');

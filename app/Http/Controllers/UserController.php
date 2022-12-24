@@ -74,7 +74,7 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return redirect()->route('users.show', ['id' => $user->id]);
+        return redirect()->route('users.show', ['user' => $user]);
     }
 
     public function destroy(User $user)
