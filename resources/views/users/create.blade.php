@@ -3,39 +3,46 @@
 @section('title', "Crear usuario")
 
 @section('content')
-    <h1>Crear usuario</h1>
+    <div class="card">
+        <h4 class="card-header">
+            Crear usuario
+        </h4>
 
-    @if($errors->any())
-        <div class="alert alert-danger">
-            <h5>Por favor, corrija los errores:</h5>
+        <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <h6>Por favor corrige los errores debajo:</h6>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ url('usuarios') }}">
+                {{ csrf_field() }}
+
+                <div class="form-group">
+                    <label for="name">Nombre:</label>
+                    <input class="form-control" type="text" name="name" id="name" placeholder="Pedro Perez" value="{{ old('name') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input class="form-control" type="email" name="email" id="email" placeholder="pedro@example.com" value="{{ old('email') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input class="form-control" type="password" name="password" id="password" placeholder="Mayor a 6 carácteres">
+                </div>
+
+                <button class="btn btn-success" type="submit">Crear usuario</button>
+
+                <a href="{{ route('users.index') }}" class="btn btn-info">Regresar al listado de usuarios</a>
+            </form>
         </div>
-    @endif
+    </div>
 
-    <form method="POST" action="{{ url('usuarios') }}">
-        {{ csrf_field() }}
-
-        <label for="name">Nombre:</label>
-        <input type="text" name="name" id="name" placeholder="Pedro Perez" value="{{ old('name') }}">
-        @if($errors->has('name'))
-            <p>{{ $errors->first('name') }}</p>
-        @endif
-
-        <br>
-
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" placeholder="pedro@example.com" value="{{ old('email') }}">
-
-        <br>
-
-        <label for="password">Contraseña:</label>
-        <input type="password" name="password" id="password" placeholder="Mayor a 6 carácteres">
-
-        <br>
-
-        <button type="submit">Crear usuario</button>
-    </form>
-
-    <p>
-        <a href="{{ route('users.index') }}">Regresar al listado de usuarios</a>
-    </p>
 @endsection
