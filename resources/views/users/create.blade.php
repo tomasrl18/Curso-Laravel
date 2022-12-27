@@ -38,6 +38,16 @@
                     <input class="form-control" type="password" name="password" id="password" placeholder="Mayor a 6 carácteres">
                 </div>
 
+                <div class="form-group">
+                    <label for="bio">Biografía:</label>
+                    <textarea class="form-control" name="bio" id="bio" placeholder="Soy desarrollador web..." {{ old('bio') }}></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="twitter">Twitter:</label>
+                    <input type="text" class="form-control" name="twitter" id="twitter" placeholder="https://twitter.com/tomasrl" {{ old('twitter') }} />
+                </div>
+
                 <button class="btn btn-success" type="submit">Crear usuario</button>
 
                 <a href="{{ route('users.index') }}" class="btn btn-info">Regresar al listado de usuarios</a>
