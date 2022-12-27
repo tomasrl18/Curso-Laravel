@@ -96,42 +96,40 @@ class UsersModuleTest extends TestCase
     function the_name_is_required()
     {
         $this->from('usuarios/nuevo')
-          ->post('/usuarios/', [
-            'name' => '',
-            'email' => 'pedro@mail.com',
-            'password' => '123456'
-        ])->assertRedirect(route('users.create'))
+          ->post('/usuarios/', $this->getValidData([
+              'name' => '',
+          ]))
+          ->assertRedirect(route('users.create'))
           ->assertSessionHasErrors(['name' => 'El campo nombre es obligatorio']);
 
-        $this->assertEquals(0, User::count());
+        $this->assertDatabaseEmpty('users');
     }
+
 
     /** @test */
     function the_email_is_required()
     {
         $this->from('usuarios/nuevo')
-            ->post('/usuarios/', [
-                'name' => 'Pedro',
+            ->post('/usuarios/', $this->getValidData([
                 'email' => '',
-                'password' => '123456'
-            ])->assertRedirect(route('users.create'))
+            ]))
+            ->assertRedirect(route('users.create'))
             ->assertSessionHasErrors(['email' => 'El campo email es obligatorio']);
 
-        $this->assertEquals(0, User::count());
+        $this->assertDatabaseEmpty('users');
     }
 
     /** @test */
     function the_email_must_be_valid()
     {
         $this->from('usuarios/nuevo')
-            ->post('/usuarios/', [
-                'name' => 'Pedro',
+            ->post('/usuarios/', $this->getValidData([
                 'email' => 'correo-no-valido',
-                'password' => '123456'
-            ])->assertRedirect(route('users.create'))
+            ]))
+            ->assertRedirect(route('users.create'))
             ->assertSessionHasErrors(['email']);
 
-        $this->assertEquals(0, User::count());
+        $this->assertDatabaseEmpty('users');
     }
 
     /** @test */
@@ -142,11 +140,10 @@ class UsersModuleTest extends TestCase
         ]);
 
         $this->from('usuarios/nuevo')
-            ->post('/usuarios/', [
-                'name' => 'Tomas',
+            ->post('/usuarios/', $this->getValidData([
                 'email' => 'tomas@mail.com',
-                'password' => '123456'
-            ])->assertRedirect(route('users.create'))
+            ]))
+            ->assertRedirect(route('users.create'))
             ->assertSessionHasErrors(['email']);
 
         $this->assertEquals(1, User::count());
@@ -156,14 +153,13 @@ class UsersModuleTest extends TestCase
     function the_password_is_required()
     {
         $this->from('usuarios/nuevo')
-            ->post('/usuarios/', [
-                'name' => 'Pedro',
-                'email' => 'pedro@mail.com',
+            ->post('/usuarios/', $this->getValidData([
                 'password' => ''
-            ])->assertRedirect(route('users.create'))
+            ]))
+            ->assertRedirect(route('users.create'))
             ->assertSessionHasErrors(['password' => 'El campo password es obligatorio']);
 
-        $this->assertEquals(0, User::count());
+        $this->assertDatabaseEmpty('users');
     }
 
     /** @test */
@@ -177,7 +173,7 @@ class UsersModuleTest extends TestCase
             ])->assertRedirect(route('users.create'))
             ->assertSessionHasErrors(['password']);
 
-        $this->assertEquals(0, User::count());
+        $this->assertDatabaseEmpty('users');
     }
 
     /** @test */
@@ -358,5 +354,36 @@ class UsersModuleTest extends TestCase
         $this->assertDatabaseMissing('users', [
             'id' => $user->id,
         ]);
+    }
+
+    /** @test */
+    function the_twitter_field_is_optional()
+    {
+        $this->post('/usuarios/', $this->getValidData([
+            'twitter' => null,
+        ]))->assertRedirect(route('users.index'));
+
+        $this->assertCredentials([
+            'name' => 'Pedro',
+            'email' => 'pedro@mail.com',
+            'password' => '123456',
+        ]);
+
+        $this->assertDatabaseHas('user_profiles', [
+            'bio' => 'Programador web',
+            'twitter' => null,
+            'user_id' => User::findByEmail('pedro@mail.com')->id,
+        ]);
+    }
+
+    public function getValidData(array $custom = [])
+    {
+        return array_filter(array_merge([
+            'name' => 'Pedro',
+            'email' => 'pedro@mail.com',
+            'password' => '123456',
+            'bio' => 'Programador web',
+            'twitter' => null,
+        ], $custom));
     }
 }
