@@ -32,6 +32,10 @@ class CreateUserRequest extends FormRequest
             'password' => 'required|min:6',
             'bio' => 'required',
             'twitter' => ['nullable', 'url'],
+            'profession_id' => [
+                'nullable',
+                Rule::exists('professions', 'id')->whereNull('deleted_at')
+            ],
         ];
     }
 
@@ -58,6 +62,7 @@ class CreateUserRequest extends FormRequest
             $user->profile()->create([
                 'bio' => $data['bio'],
                 'twitter' => $data['twitter'] ?? null,
+                'profession_id' => $data['profession_id'] ?? null,
             ]);
         });
     }
