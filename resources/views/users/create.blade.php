@@ -60,9 +60,25 @@
                     <input type="text" class="form-control" name="twitter" id="twitter" placeholder="https://twitter.com/tomasrl" {{ old('twitter') }} />
                 </div>
 
-                <button class="btn btn-success" type="submit">Crear usuario</button>
+                <h5>Habilidades</h5>
 
-                <a href="{{ route('users.index') }}" class="btn btn-info">Regresar al listado de usuarios</a>
+                @foreach($skills as $skill)
+                    <div class="form-check form-check-inline">
+                        <input name="skills[{{ $skill->id }}]"
+                               class="form-check-input"
+                               type="checkbox"
+                               id="skill_{{ $skill->id }}"
+                               value="{{ $skill->id }}"
+                               {{ old("skills.{$skill->id}") ? 'checked' : '' }}>
+                        <label class="form-check-label" for="skill_{{ $skill->id }}">{{ $skill->name }}</label>
+                    </div>
+                @endforeach
+
+                <div class="form-group mt-4">
+                    <button class="btn btn-success" type="submit">Crear usuario</button>
+                    <a href="{{ route('users.index') }}" class="btn btn-info">Regresar al listado de usuarios</a>
+                </div>
+
             </form>
         </div>
     </div>

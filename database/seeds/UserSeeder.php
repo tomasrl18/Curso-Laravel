@@ -1,5 +1,6 @@
 <?php
 
+use App\UserProfile;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\User;
@@ -29,8 +30,7 @@ class UserSeeder extends Seeder
         ]);
 
         factory(User::class, 29)->create()->each(function ($user) {
-            $user->profile()->create();
-            factory(\App\UserProfile::class)->raw();
+            $user->profile()->create(factory(UserProfile::class)->raw());
         });
     }
 }
