@@ -11,7 +11,7 @@
         <form method="POST" action="{{ url("usuarios/{$user->id}") }}">
             {{ method_field('PUT') }}
 
-            @include('users._fields')
+            @render('UserFields', ['user' => $user])
 
             <div class="form-group mt-4">
                 <button class="btn btn-success" type="submit">Actualizar usuario</button>
