@@ -38,7 +38,7 @@ class UpdateUsersTest extends TestCase
     }
 
     /** @test */
-    function it_edits_a_user()
+    function it_updates_a_user()
     {
         $user = factory(User::class)->create();
 

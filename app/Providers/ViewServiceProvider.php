@@ -16,6 +16,8 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Blade::component('shared._card', 'card');
+
         Blade::directive('render', function ($expression) {
             $parts = explode(',', $expression, 2);
 

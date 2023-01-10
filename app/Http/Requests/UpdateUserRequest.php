@@ -2,9 +2,8 @@
 
 namespace App\Http\Requests;
 
-use App\Role;
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
@@ -42,20 +41,24 @@ class UpdateUserRequest extends FormRequest
 
     public function updateUser(User $user)
     {
-        $data = $this->validated();
+        $user->fill([
+            'name' => $this->name,
+            'email' => $this->email,
+        ]);
 
-        if ($data['password'] != null) {
-            $data['password'] = bcrypt($data['password']);
-        } else {
-            unset($data['password']);
+        if ($this->password != null) {
+            $user->password = bcrypt($this->password);
         }
 
-        $user->fill($data);
-        $user->role = $data['role'];
+        $user->role = $this->role;
         $user->save();
 
-        $user->profile->update($data);
+        $user->profile->update([
+            'twitter' => $this->twitter,
+            'bio' => $this->bio,
+            'profession_id' => $this->profession_id,
+        ]);
 
-        $user->skills()->sync($data['skills'] ?? []);
+        $user->skills()->sync($this->skills ?: []);
     }
 }
