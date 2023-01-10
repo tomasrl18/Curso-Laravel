@@ -276,7 +276,7 @@ class CreateUsersTest extends TestCase
     }
 
     /** @test */
-    function the_role_field_is_optional()
+    function the_role_is_optional()
     {
         $this->post('/usuarios/', $this->withData([
             'role' => null,

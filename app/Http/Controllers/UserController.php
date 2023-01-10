@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\{Http\Requests\CreateUserRequest, Profession, Skill, User, UserProfile};
+use App\{Http\Requests\CreateUserRequest, Http\Requests\UpdateUserRequest, Profession, Skill, User, UserProfile};
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -42,25 +42,11 @@ class UserController extends Controller
         return view('users.edit', compact('user'));
     }
 
-    public function update(User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $data = request()->validate([
-            'name' => 'required',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('users', 'email')->ignore($user->id)
-            ],
-            'password' => '',
-        ]);
+        $data = $request->validated();
 
-        if ($data['password'] != null) {
-            $data['password'] = bcrypt($data['password']);
-        } else {
-            unset($data['password']);
-        }
-
-        $user->update($data);
+        $request->updateUser($user);
 
         return redirect()->route('users.show', ['user' => $user]);
     }

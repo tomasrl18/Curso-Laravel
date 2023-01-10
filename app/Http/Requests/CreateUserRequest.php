@@ -75,7 +75,9 @@ class CreateUserRequest extends FormRequest
                 'profession_id' => $data['profession_id'] ?? null,
             ]);
 
-            $user->skills()->attach($data['skills'] ?? []);
+            if (! empty($data['skills'])) {
+                $user->skills()->attach($data['skills']);
+            }
         });
     }
 }
