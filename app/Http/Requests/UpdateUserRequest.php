@@ -44,13 +44,13 @@ class UpdateUserRequest extends FormRequest
         $user->fill([
             'name' => $this->name,
             'email' => $this->email,
+            'role' => $this->role,
         ]);
 
         if ($this->password != null) {
             $user->password = bcrypt($this->password);
         }
 
-        $user->role = $this->role;
         $user->save();
 
         $user->profile->update([
